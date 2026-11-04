@@ -13,6 +13,3 @@
 - kindergarten.html … 園・施設の皆様へ
 - contact.html … お問い合わせ（Googleフォームへのリンク）
 - css/style.css、js/main.js、images/
-
-## 未確定の箇所（黄色マーカー表示）
-- parents.html の [保存期間]、[参加費についての案内]
