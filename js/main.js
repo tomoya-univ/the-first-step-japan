@@ -86,3 +86,105 @@ document.addEventListener('DOMContentLoaded', function () {
     io.observe(el);
   });
 });
+
+// ---------- 派手な演出（第2弾） ----------
+document.addEventListener('DOMContentLoaded', function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var colors = ['#FFD54A', '#1F64C8', '#F28C28', '#2C7A4B', '#F06292', '#7CB5FF'];
+  var shapes = {
+    star: '<svg viewBox="0 0 24 24"><path fill="C" d="M12 1.5l3 7 7.5.6-5.7 5 1.8 7.4L12 17.6 5.4 21.5l1.8-7.4L1.5 9.1 9 8.5z"/></svg>',
+    heart: '<svg viewBox="0 0 24 24"><path fill="C" d="M12 21s-8.5-5.3-8.5-11.2A4.8 4.8 0 0 1 12 6.6a4.8 4.8 0 0 1 8.5 3.2C20.5 15.7 12 21 12 21z"/></svg>',
+    circle: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="C" stroke-width="3.5"/></svg>',
+    squiggle: '<svg viewBox="0 0 48 16"><path d="M2 8c5-8 9 8 14 0s9 8 14 0 9 8 14 0" fill="none" stroke="C" stroke-width="3.5" stroke-linecap="round"/></svg>',
+    tri: '<svg viewBox="0 0 24 24"><path d="M12 3l9 16H3z" fill="none" stroke="C" stroke-width="3" stroke-linejoin="round"/></svg>',
+    dot: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="C"/></svg>'
+  };
+  function rnd(a, b) { return a + Math.random() * (b - a); }
+
+  // 1) 見出しエリアに飾りを散らす（文字と重なりにくい端のほうへ）
+  var spots = [[3, 12], [44, 6], [92, 10], [96, 46], [6, 78], [48, 92], [88, 86], [70, 4], [30, 60], [60, 70]];
+  document.querySelectorAll('.hero, .page-hero').forEach(function (area) {
+    var layer = document.createElement('div');
+    layer.className = 'deco-layer';
+    layer.setAttribute('aria-hidden', 'true');
+    var names = Object.keys(shapes);
+    var n = area.classList.contains('hero') ? 10 : 6;
+    for (var i = 0; i < n; i++) {
+      var name = names[i % names.length];
+      var el = document.createElement('span');
+      el.className = 'deco' + (name === 'squiggle' ? ' no-spin' : '');
+      var size = name === 'squiggle' ? rnd(48, 70) : rnd(16, 34);
+      var s = spots[i % spots.length];
+      el.style.cssText = 'left:' + s[0] + '%;top:' + s[1] + '%;width:' + size + 'px;opacity:' + rnd(.55, .9).toFixed(2) +
+        ';--t:' + rnd(4, 8).toFixed(1) + 's;--dl:-' + rnd(0, 4).toFixed(1) + 's;--x:' + rnd(-20, 20).toFixed(0) + 'px;--y:' + rnd(-28, 28).toFixed(0) +
+        'px;--rt:' + rnd(12, 30).toFixed(0) + 's';
+      el.innerHTML = shapes[name].replace(/C/g, colors[i % colors.length]);
+      layer.appendChild(el);
+    }
+    area.insertBefore(layer, area.firstChild);
+  });
+
+  // 2) トップのタイトルを1文字ずつに分ける（読み上げ用に元の文は残す）
+  var h1 = document.querySelector('.hero h1');
+  if (h1 && !reduce) {
+    var label = h1.textContent.replace(/\s+/g, '');
+    var idx = 0, dots = 0;
+    var walk = function (node) {
+      Array.prototype.slice.call(node.childNodes).forEach(function (c) {
+        if (c.nodeType === 3) {
+          var frag = document.createDocumentFragment();
+          Array.prototype.forEach.call(c.textContent.trim(), function (t) {
+            var sp = document.createElement('span');
+            sp.className = 'ch' + (t === '・' ? (dots++ % 2 ? ' dot dot-b' : ' dot') : '');
+            sp.style.setProperty('--i', idx++);
+            sp.textContent = t;
+            sp.setAttribute('aria-hidden', 'true');
+            frag.appendChild(sp);
+          });
+          node.replaceChild(frag, c);
+        }
+      });
+    };
+    walk(h1);
+    h1.setAttribute('aria-label', label);
+  }
+
+  // 3) フッターに、歩いていく足あと
+  var footer = document.querySelector('.site-footer');
+  if (footer) {
+    var fp = document.createElement('div');
+    fp.className = 'footprints-walk';
+    fp.setAttribute('aria-hidden', 'true');
+    for (var k = 0; k < 8; k++) {
+      var up = k % 2 === 0;
+      fp.insertAdjacentHTML('beforeend',
+        '<svg viewBox="-12 -12 32 24" style="--i:' + k + ';margin-top:' + (up ? 0 : 12) + 'px"><g fill="' + (up ? '#7CB5FF' : '#FFD54A') + '"><ellipse cx="0" cy="0" rx="11" ry="6.5"/>' +
+        (up ? '<circle cx="13" cy="-4" r="2.4"/><circle cx="15.5" cy="-.5" r="2.1"/><circle cx="15" cy="3" r="1.8"/><circle cx="12.5" cy="5.8" r="1.5"/>'
+            : '<circle cx="13" cy="4" r="2.4"/><circle cx="15.5" cy=".5" r="2.1"/><circle cx="15" cy="-3" r="1.8"/><circle cx="12.5" cy="-5.8" r="1.5"/>') +
+        '</g></svg>');
+    }
+    footer.insertBefore(fp, footer.firstChild);
+  }
+
+  // 4) 画面をタップ・クリックすると、星や丸がはじける
+  if (reduce) return;
+  document.addEventListener('pointerdown', function (e) {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    var kinds = ['star', 'dot', 'heart'];
+    for (var j = 0; j < 10; j++) {
+      var d = document.createElement('span');
+      d.className = 'burst-dot';
+      var ang = (Math.PI * 2 * j) / 10 + rnd(-.3, .3);
+      var dist = rnd(40, 90);
+      d.style.left = e.clientX + 'px';
+      d.style.top = e.clientY + 'px';
+      d.style.width = d.style.height = rnd(10, 18).toFixed(0) + 'px';
+      d.style.setProperty('--bx', (Math.cos(ang) * dist).toFixed(0) + 'px');
+      d.style.setProperty('--by', (Math.sin(ang) * dist).toFixed(0) + 'px');
+      d.style.animation = 'hj-burst ' + rnd(.6, .9).toFixed(2) + 's cubic-bezier(.2,.8,.3,1) forwards';
+      d.innerHTML = shapes[kinds[j % 3]].replace(/C/g, colors[j % colors.length]);
+      document.body.appendChild(d);
+      setTimeout(function (x) { return function () { x.remove(); }; }(d), 1000);
+    }
+  }, { passive: true });
+});
