@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>活動について｜おえかきひろば</title>
+<meta name="description" content="おえかきひろばの目的、アプリの役割、システムの仕組みをご紹介します。">
+<meta property="og:title" content="活動について｜おえかきひろば">
+<meta property="og:image" content="https://tomoya-univ.github.io/the-first-step-japan/images/ogp.png">
+<link rel="icon" href="images/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="css/style.css">
+<script src="js/main.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">本文へスキップ</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="index.html"><img src="images/logo.svg" alt=""><span>おえかきひろば</span></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="global-nav">メニュー</button>
+    <nav class="nav" id="global-nav" aria-label="メインメニュー">
+      <ul>
+        <li><a href="about.html" aria-current="page">活動について</a></li>
+        <li><a href="howto.html">あそびかた</a></li>
+        <li><a href="kids.html">こどものみんなへ</a></li>
+        <li><a href="parents.html">保護者の皆様へ</a></li>
+        <li><a href="kindergarten.html">園・施設の皆様へ</a></li>
+        <li><a href="contact.html">お問い合わせ</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="パンくずリスト"><ol><li><a href="index.html">トップ</a></li><li>活動について</li></ol></nav>
+      <p class="eyebrow">ABOUT</p>
+      <h1>活動について</h1>
+      <p class="lead">「おえかきひろば」は、お絵かきという身近な遊びを入り口に、親子でインターネットについて話し合うきっかけをつくる取り組みです。</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">PURPOSE ／ 目的</p>
+      <h2 class="h2">低年齢のうちから、<br>「楽しさ」と「気をつけること」を一緒に。</h2>
+      <p class="lead">このアプリは、低年齢の段階から家族などとの間でインターネットコミュニケーションを行う楽しさと、その際の注意事項について知る機会、つまり親子で会話する機会を得られることを目的に作成しました。</p>
+      <p class="lead">本施策は、総務省の「ICT活用のためのリテラシー向上に関する検討会」での検討に沿って進めており、「デジタル技術を通じて他者や社会と関わる能力」などと関連付けています。</p>
+      <p class="note">参考：総務省資料「ICTリテラシーロードマップに基づく取組と最新の状況を踏まえた今後の方向性について」<br><a href="https://www.soumu.go.jp/main_content/000978690.pdf" target="_blank" rel="noopener">https://www.soumu.go.jp/main_content/000978690.pdf</a></p>
+    </div>
+  </section>
+
+  <section class="section section--white">
+    <div class="container">
+      <p class="eyebrow">ROLES ／ アプリの役割</p>
+      <h2 class="h2">体験することで、<br>話し合いのきっかけに。</h2>
+      <p class="lead">子ども・保護者・会場の担当者が、それぞれの役割で関わります。</p>
+      <div class="cards roles">
+        <div class="card card--yellow">
+          <img src="images/icon-child.svg" alt="" width="64" height="64">
+          <h3 class="h3">子ども（3歳〜8歳程度）</h3>
+          <p>イベントの待ち時間などに、タブレットでお絵かき。複数人で協力して描いたり、みんなで確認したりします。</p>
+        </div>
+        <div class="card card--blue">
+          <img src="images/icon-parent.svg" alt="" width="64" height="64">
+          <h3 class="h3">保護者</h3>
+          <p>投稿前に子どもと一緒に内容を確認。送信された絵を閲覧して安全性を再確認し、描いた絵をスマートフォンに保存できます。</p>
+        </div>
+        <div class="card card--green">
+          <img src="images/icon-staff.svg" alt="" width="64" height="64">
+          <h3 class="h3">会場の担当者</h3>
+          <p>体験の進行と管理を担当します。お子さまの操作を見守り、必要に応じてサポートします。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">SYSTEM ／ しくみ</p>
+      <h2 class="h2">タブレットの絵を、<br>保護者のスマートフォンで受け取る仕組み</h2>
+      <div class="system">
+        <div class="node">
+          <img src="images/icon-child.svg" alt="" width="72" height="72">
+          <h3>アプリケーション本体</h3>
+          <p>1人または複数人で利用。描き終えると二次元コードが表示されます。</p>
+        </div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="node">
+          <img src="images/icon-server.svg" alt="" width="72" height="72">
+          <h3>画像・動画の保存サイト</h3>
+          <p>サーバーに絵（画像・動画）を一定期間保存し、ダウンロードできるようにします。</p>
+        </div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="node">
+          <img src="images/icon-parent.svg" alt="" width="72" height="72">
+          <h3>保護者用 携帯サイト</h3>
+          <p>会場で二次元コードを読み取ってアクセスし、絵を保存します。</p>
+        </div>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <img src="images/icon-form.svg" alt="" width="64" height="64">
+          <h3 class="h3">アンケート（Googleフォーム）</h3>
+          <p>保護者用サイトからアンケートにリンクし、体験後のご意見・ご感想をお聞きします。いただいた声は、アプリの改善や啓発活動に活用します。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--white">
+    <div class="container">
+      <div class="cta-band">
+        <div>
+          <h2>あそびかたを見てみましょう</h2>
+          <p>アプリの画面の流れを、ステップごとにご紹介します。</p>
+        </div>
+        <a class="btn btn-white" href="howto.html">あそびかたへ</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div>
+      <p class="brand">おえかきひろば</p>
+      <p class="org">一般社団法人 安心ネットづくり促進協議会</p>
+    </div>
+    <nav class="footer-nav" aria-label="フッターメニュー">
+      <ul>
+        <li><a href="about.html">活動について</a></li>
+        <li><a href="howto.html">あそびかた</a></li>
+        <li><a href="kids.html">こどものみんなへ</a></li>
+        <li><a href="parents.html">保護者の皆様へ</a></li>
+        <li><a href="kindergarten.html">園・施設の皆様へ</a></li>
+        <li><a href="contact.html">お問い合わせ</a></li>
+      </ul>
+    </nav>
+    <p class="copyright">© 2026 おえかきひろば</p>
+  </div>
+</footer>
+</body>
+</html>
