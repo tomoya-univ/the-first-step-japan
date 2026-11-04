@@ -310,3 +310,10 @@ html.show-loader.loader-done .loader { opacity: 0; visibility: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .loader-steps .print, .loader-title, .loader-sub { animation: none; opacity: 1; }
 }
+
+/* ---------- プライバシーポリシー ---------- */
+.policy h2 { margin: 36px 0 0; padding-bottom: 8px; border-bottom: 2px solid var(--line); }
+.policy h2:first-child { margin-top: 0; }
+.policy p, .policy li { color: var(--sub); }
+.policy ul { margin: 12px 0 0; padding-left: 1.4em; display: flex; flex-direction: column; gap: 6px; }
+.policy p { margin: 12px 0 0; }
