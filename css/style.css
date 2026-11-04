@@ -317,3 +317,85 @@ html.show-loader.loader-done .loader { opacity: 0; visibility: hidden; }
 .policy p, .policy li { color: var(--sub); }
 .policy ul { margin: 12px 0 0; padding-left: 1.4em; display: flex; flex-direction: column; gap: 6px; }
 .policy p { margin: 12px 0 0; }
+
+/* =========================================================
+   動きの演出（OSの「視差効果を減らす」設定時はすべて止める）
+   ========================================================= */
+@media (prefers-reduced-motion: no-preference) {
+
+  /* --- スクロールで、ふわっと表示 --- */
+  html.js .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1); transition-delay: var(--d, 0s); }
+  html.js .reveal.is-visible { opacity: 1; transform: none; }
+
+  /* 番号の丸は、表示されたときにポンッと弾む */
+  html.js .reveal .step-num, html.js .reveal .num { transform: scale(0); }
+  html.js .reveal.is-visible .step-num, html.js .reveal.is-visible .num { animation: hj-pop .5s cubic-bezier(.3,1.6,.5,1) forwards; animation-delay: calc(var(--d, 0s) + .25s); }
+
+  /* 見出しの下に、クレヨンで線を引くような下線 */
+  .h2::after { content: ""; display: block; width: 64px; height: 6px; margin-top: 12px; border-radius: 999px; background: var(--yellow); transform-origin: left; }
+  .center .h2::after { margin-left: auto; margin-right: auto; transform-origin: center; }
+  .cta-band .h2::after, .policy .h2::after { display: none; }
+  html.js .reveal .h2::after, html.js .h2.reveal::after { transform: scaleX(0); transition: transform .8s cubic-bezier(.2,.8,.2,1) .35s; }
+  html.js .reveal.is-visible .h2::after, html.js .h2.reveal.is-visible::after { transform: scaleX(1); }
+
+  /* --- トップの登場（ロード画面が消えてから始まる） --- */
+  .hero-text > * { animation: hj-rise .8s cubic-bezier(.2,.8,.2,1) both; }
+  .hero-text > :nth-child(1) { animation-delay: .05s; }
+  .hero-text > :nth-child(2) { animation-delay: .15s; }
+  .hero-text > :nth-child(3) { animation-delay: .25s; }
+  .hero-text > :nth-child(4) { animation-delay: .35s; }
+  .hero-text > :nth-child(5) { animation-delay: .45s; }
+  .hero-text > :nth-child(6) { animation-delay: .55s; }
+  .hero-art { animation: hj-rise 1s cubic-bezier(.2,.8,.2,1) .3s both; }
+  .hero-art img { animation: hj-float 6s ease-in-out 1.3s infinite; }
+  .page-hero .container > * { animation: hj-rise .7s cubic-bezier(.2,.8,.2,1) both; }
+  .page-hero .container > :nth-child(2) { animation-delay: .1s; }
+  .page-hero .container > :nth-child(3) { animation-delay: .2s; }
+  .page-hero .container > :nth-child(4) { animation-delay: .3s; }
+  html.show-loader:not(.loader-done) .hero-text > *,
+  html.show-loader:not(.loader-done) .hero-art,
+  html.show-loader:not(.loader-done) .page-hero .container > * { animation-play-state: paused; }
+
+  /* --- 背景で、ふわふわ動く色の丸 --- */
+  .hero, .page-hero { position: relative; overflow: hidden; isolation: isolate; }
+  .hero::before, .hero::after, .page-hero::before, .page-hero::after {
+    content: ""; position: absolute; z-index: -1; border-radius: 50%; pointer-events: none;
+    animation: hj-drift 14s ease-in-out infinite alternate;
+  }
+  .hero::before { width: 220px; height: 220px; top: -60px; right: 8%; background: var(--yellow-pale); }
+  .hero::after { width: 140px; height: 140px; bottom: -40px; left: 4%; background: var(--blue-pale); animation-duration: 11s; animation-direction: alternate-reverse; }
+  .page-hero::before { width: 160px; height: 160px; top: -50px; right: 6%; background: var(--yellow-pale); }
+  .page-hero::after { width: 90px; height: 90px; bottom: -30px; right: 28%; background: var(--green-pale); animation-duration: 10s; animation-direction: alternate-reverse; }
+
+  /* --- ボタン・カードのホバー --- */
+  .btn { transition: transform .2s cubic-bezier(.3,1.6,.5,1), box-shadow .2s ease, background-color .2s ease, color .2s ease; }
+  .btn:hover { transform: translateY(-3px); box-shadow: 0 6px 0 rgba(43,41,51,.15); }
+  .btn:active { transform: translateY(1px); box-shadow: none; }
+  .card-link { transition: transform .25s cubic-bezier(.3,1.6,.5,1), border-color .2s ease, box-shadow .25s ease; }
+  .card-link:hover { transform: translateY(-6px) rotate(-.6deg); box-shadow: 0 12px 24px rgba(43,41,51,.08); }
+  .card-link .more { transition: letter-spacing .2s ease; }
+  .card-link:hover .more { letter-spacing: .06em; }
+  .step, .flow li, .promise, .system .node { transition: transform .25s ease, box-shadow .25s ease; }
+  .step:hover, .flow li:hover, .promise:hover, .system .node:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(43,41,51,.06); }
+  .system .arrow { animation: hj-nudge 1.6s ease-in-out infinite; }
+  @media (max-width: 760px) { .system .arrow { animation: none; } }
+  .logo img { transition: transform .4s cubic-bezier(.3,1.6,.5,1); }
+  .logo:hover img { transform: rotate(-12deg) scale(1.1); }
+
+  /* こどもページ：絵をさわると、ゆらゆら */
+  .big-step img { transition: transform .2s ease; }
+  .big-step:hover img { animation: hj-wiggle .6s ease-in-out; }
+
+  /* FAQ：ひらいた答えを、ふわっと表示 */
+  .faq details[open] .answer { animation: hj-rise .35s ease-out both; }
+}
+
+/* スクロール位置を示す、ページ上部の細いバー */
+.scroll-progress { position: fixed; top: 0; left: 0; z-index: 900; height: 4px; width: 100%; background: linear-gradient(90deg, var(--blue), var(--yellow)); transform: scaleX(0); transform-origin: left; pointer-events: none; }
+
+@keyframes hj-rise { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+@keyframes hj-pop { from { transform: scale(0); } to { transform: scale(1); } }
+@keyframes hj-float { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-12px) rotate(-1deg); } }
+@keyframes hj-drift { from { transform: translate(0, 0) scale(1); } to { transform: translate(-30px, 24px) scale(1.12); } }
+@keyframes hj-nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(6px); } }
+@keyframes hj-wiggle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-8deg) scale(1.05); } 75% { transform: rotate(8deg) scale(1.05); } }
