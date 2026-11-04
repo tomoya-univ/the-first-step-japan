@@ -279,3 +279,34 @@ fieldset.field { border: 0; padding: 0; margin: 0; }
 .footer-nav a { color: #fff; text-decoration: none; font-size: 0.9rem; display: block; padding: 8px 0; }
 .footer-nav a:hover { color: var(--yellow); }
 .copyright { width: 100%; margin: 16px 0 0; padding-top: 16px; border-top: 1px solid #45434F; font-size: 0.85rem; color: #D6D4DE; }
+
+/* ---------- ロード画面（セッション中の初回表示のみ） ---------- */
+.loader { display: none; }
+html.show-loader .loader {
+  display: flex; position: fixed; inset: 0; z-index: 1000;
+  align-items: center; justify-content: center;
+  background: var(--ground);
+  transition: opacity .6s ease, visibility .6s ease;
+}
+html.show-loader.loader-done .loader { opacity: 0; visibility: hidden; }
+.loader-inner { text-align: center; }
+.loader-steps { display: block; margin: 0 auto; }
+.loader-steps .print { opacity: 0; animation: hj-print .35s ease-out forwards; }
+.loader-steps .p1 { animation-delay: .1s; }
+.loader-steps .p2 { animation-delay: .4s; }
+.loader-steps .p3 { animation-delay: .7s; }
+.loader-steps .p4 { animation-delay: 1.0s; }
+.loader-title {
+  margin: 18px 0 0; font-size: clamp(1.8rem, 6vw, 2.6rem); font-weight: 900; letter-spacing: .08em;
+  opacity: 0; animation: hj-fade .5s ease-out 1.25s forwards;
+}
+.loader-sub {
+  margin: 6px 0 0; font-size: 1rem; font-weight: 700; color: var(--muted);
+  opacity: 0; animation: hj-fade .5s ease-out 1.45s forwards;
+}
+@keyframes hj-print { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+.loader-steps .print { transform-box: fill-box; transform-origin: center; }
+@keyframes hj-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .loader-steps .print, .loader-title, .loader-sub { animation: none; opacity: 1; }
+}
