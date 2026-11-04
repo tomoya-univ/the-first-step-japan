@@ -1,4 +1,4 @@
-# おえかきひろば Webサイト
+# はじめのいっぽ Webサイト
 
 公開URL：https://tomoya-univ.github.io/the-first-step-japan/
 
