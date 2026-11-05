@@ -478,3 +478,63 @@ html.show-loader .loader { animation: hj-loader-out .6s ease 5s forwards; }
   .card:hover > img, .system .node:hover img, .logo:hover img { transform: none; }
   .big-step:hover img, .hero h1:hover .ch, .step:hover .step-num, .flow li:hover .step-num { animation-name: none; }
 }
+
+/* =========================================================
+   季節の飾り・上に戻るボタン・ページ移動の演出
+   ========================================================= */
+.season-layer { position: absolute; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.season-layer .fall { position: absolute; top: -40px; display: block; }
+.season-layer .fall svg { display: block; width: 100%; height: auto; }
+
+/* 足あとの「上に戻る」ボタン */
+.to-top {
+  position: fixed; right: 16px; bottom: 16px; z-index: 950;
+  width: 56px; height: 56px; border-radius: 50%; border: 3px solid var(--ink);
+  background: var(--yellow); color: var(--ink); cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0;
+  font-family: inherit; font-size: 10px; font-weight: 900; line-height: 1;
+  box-shadow: 0 4px 0 rgba(38,37,46,.25);
+  opacity: 0; visibility: hidden; transform: translateY(16px);
+  transition: opacity .3s ease, transform .3s ease, visibility .3s;
+}
+.to-top svg { width: 26px; height: 26px; }
+.to-top.is-shown { opacity: 1; visibility: visible; transform: none; }
+.to-top:hover { background: #FFE27A; }
+.walk-print { position: fixed; z-index: 940; width: 26px; height: 26px; pointer-events: none; }
+
+/* ページ移動のときに画面を覆う幕 */
+.transit {
+  position: fixed; inset: 0; z-index: 1050; pointer-events: none;
+  background: var(--ground); display: flex; align-items: center; justify-content: center;
+}
+.transit .row { display: flex; gap: 22px; }
+.transit .row svg { width: 44px; height: 30px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .season-layer .fall { animation: hj-fall var(--t, 9s) linear var(--dl, 0s) infinite; }
+  .season-layer .fall svg { animation: hj-sway var(--st, 3s) ease-in-out infinite alternate; }
+  .season-layer.bubble .fall { top: auto; bottom: -40px; animation-name: hj-rise-up; }
+
+  .to-top.is-shown svg { animation: hj-hop 1.6s ease-in-out infinite; }
+  .walk-print { animation: hj-print-up .9s ease-out forwards; }
+
+  .transit { transform: translateX(-100%); }
+  .transit.is-in { animation: hj-wipe-in .45s cubic-bezier(.6,0,.3,1) forwards; }
+  .transit .row svg { opacity: 0; }
+  .transit.is-in .row svg { animation: hj-print .25s ease-out forwards; }
+  /* 移動先のページでは、幕が右へ抜けていく */
+  html.arrive body::after {
+    content: ""; position: fixed; inset: 0; z-index: 1050; pointer-events: none;
+    background: var(--ground); animation: hj-wipe-out .5s cubic-bezier(.6,0,.3,1) .05s forwards;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .season-layer, .transit { display: none; }
+}
+
+@keyframes hj-fall { from { transform: translateY(0) rotate(0); } to { transform: translateY(var(--h, 700px)) rotate(var(--r, 360deg)); } }
+@keyframes hj-rise-up { 0% { transform: translateY(0) scale(.6); opacity: 0; } 15% { opacity: .9; } 85% { opacity: .9; } 100% { transform: translateY(calc(-1 * var(--h, 700px))) scale(1.1); opacity: 0; } }
+@keyframes hj-sway { from { transform: translateX(-14px); } to { transform: translateX(14px); } }
+@keyframes hj-print-up { 0% { opacity: 0; transform: scale(.5) rotate(-90deg); } 20%, 70% { opacity: 1; transform: rotate(-90deg); } 100% { opacity: 0; transform: rotate(-90deg); } }
+@keyframes hj-wipe-in { from { transform: translateX(-100%); } to { transform: none; } }
+@keyframes hj-wipe-out { from { transform: none; } to { transform: translateX(100%); } }

@@ -224,3 +224,133 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }, { passive: true });
 });
+
+// ---------- 季節の飾り・上に戻るボタン・ページ移動の演出 ----------
+document.addEventListener('DOMContentLoaded', function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function rnd(a, b) { return a + Math.random() * (b - a); }
+  function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+  // 足あと1つ分の絵（left: 左足 / それ以外: 右足）
+  function footprint(color, left) {
+    var toes = left
+      ? '<circle cx="13" cy="-4" r="2.4"/><circle cx="15.5" cy="-.5" r="2.1"/><circle cx="15" cy="3" r="1.8"/><circle cx="12.5" cy="5.8" r="1.5"/>'
+      : '<circle cx="13" cy="4" r="2.4"/><circle cx="15.5" cy=".5" r="2.1"/><circle cx="15" cy="-3" r="1.8"/><circle cx="12.5" cy="-5.8" r="1.5"/>';
+    return '<svg viewBox="-12 -12 32 24" aria-hidden="true"><g fill="' + color + '"><ellipse cx="0" cy="0" rx="11" ry="6.5"/>' + toes + '</g></svg>';
+  }
+
+  // 1) 季節の飾り（12〜2月：雪、3〜5月：桜、6〜8月：シャボン玉、9〜11月：落ち葉）
+  //    ※ 確認用に URL の末尾へ ?season=winter などを付けると、その季節で表示できる
+  if (!reduce) {
+    var m = new Date().getMonth() + 1;
+    var season = m === 12 || m <= 2 ? 'winter' : m <= 5 ? 'spring' : m <= 8 ? 'summer' : 'autumn';
+    var q = /[?&]season=(winter|spring|summer|autumn)/.exec(location.search);
+    if (q) season = q[1];
+    var art = {
+      winter: function () {
+        var c = pick(['#9CC3F5', '#B9D6FA', '#7CB5FF']);
+        return '<svg viewBox="0 0 24 24"><g stroke="' + c + '" stroke-width="2" stroke-linecap="round" fill="none">' +
+          '<path d="M12 2v20M3.3 7l17.4 10M3.3 17L20.7 7"/><path d="M9.5 3.5L12 6l2.5-2.5M9.5 20.5L12 18l2.5 2.5"/></g></svg>';
+      },
+      spring: function () {
+        var c = pick(['#F7B6C8', '#F9C9D6', '#F29BB5']);
+        return '<svg viewBox="0 0 24 24"><path fill="' + c + '" d="M12 22C6 18 4 12 6 7c1.5-3.5 4-5 6-3 2-2 4.5-.5 6 3 2 5 0 11-6 15z"/><path d="M12 4l-1 3 1 1 1-1z" fill="#fff" opacity=".7"/></svg>';
+      },
+      summer: function () {
+        var c = pick(['#7CB5FF', '#9AD7C4', '#C7A8F0', '#F7B6C8']);
+        return '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="' + c + '" fill-opacity=".18" stroke="' + c + '" stroke-width="1.6"/><path d="M7 9a6 6 0 0 1 4-3.5" stroke="#fff" stroke-width="2" stroke-linecap="round" fill="none"/></svg>';
+      },
+      autumn: function () {
+        var c = pick(['#F28C28', '#E86A3A', '#F2B134', '#C9572B']);
+        return '<svg viewBox="0 0 24 24"><path fill="' + c + '" d="M12 2l2 4.5 4-2-1 4.5 4.5 1-3.5 3 1.5 4-4.5-1L12 21l-3-5-4.5 1L6 13 2.5 10 7 9 6 4.5l4 2z"/><path d="M12 21v3" stroke="' + c + '" stroke-width="1.5"/></svg>';
+      }
+    }[season];
+    document.querySelectorAll('.hero, .page-hero').forEach(function (area) {
+      var layer = document.createElement('div');
+      layer.className = 'season-layer' + (season === 'summer' ? ' bubble' : '');
+      layer.setAttribute('aria-hidden', 'true');
+      var n = area.classList.contains('hero') ? 14 : 8;
+      var h = area.offsetHeight + 80;
+      for (var i = 0; i < n; i++) {
+        var el = document.createElement('span');
+        el.className = 'fall';
+        var size = season === 'summer' ? rnd(20, 44) : rnd(16, 30);
+        el.style.cssText = 'left:' + rnd(0, 98).toFixed(1) + '%;width:' + size.toFixed(0) + 'px;opacity:' + rnd(.6, .95).toFixed(2) +
+          ';--t:' + rnd(7, 14).toFixed(1) + 's;--dl:-' + rnd(0, 14).toFixed(1) + 's;--st:' + rnd(2, 4).toFixed(1) + 's;--h:' + h + 'px;--r:' +
+          (season === 'winter' ? rnd(90, 240) : rnd(180, 540)).toFixed(0) + 'deg';
+        el.innerHTML = art();
+        layer.appendChild(el);
+      }
+      area.insertBefore(layer, area.firstChild);
+    });
+  }
+
+  // 2) 足あとの「上に戻る」ボタン
+  var btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'to-top';
+  btn.setAttribute('aria-label', 'ページの上に戻る');
+  btn.innerHTML = '<svg viewBox="-12 -12 32 24" aria-hidden="true" style="transform:rotate(-90deg)"><g fill="#26252E"><ellipse cx="0" cy="0" rx="11" ry="6.5"/><circle cx="13" cy="-4" r="2.4"/><circle cx="15.5" cy="-.5" r="2.1"/><circle cx="15" cy="3" r="1.8"/><circle cx="12.5" cy="5.8" r="1.5"/></g></svg><span aria-hidden="true">うえへ</span>';
+  document.body.appendChild(btn);
+  var shown = false;
+  function toggleBtn() {
+    var s = window.scrollY > window.innerHeight * 0.8;
+    if (s !== shown) { shown = s; btn.classList.toggle('is-shown', s); }
+  }
+  window.addEventListener('scroll', toggleBtn, { passive: true });
+  toggleBtn();
+  btn.addEventListener('click', function () {
+    if (reduce) { window.scrollTo(0, 0); return; }
+    // ボタンの位置から、足あとがぺたぺた上へ歩いていく
+    var r = btn.getBoundingClientRect();
+    var x = r.left + r.width / 2 - 13;
+    for (var i = 0; i < 7; i++) {
+      (function (i) {
+        setTimeout(function () {
+          var p = document.createElement('span');
+          p.className = 'walk-print';
+          p.style.left = (x + (i % 2 ? 10 : -10)) + 'px';
+          p.style.top = (r.top - 40 - i * 46) + 'px';
+          p.innerHTML = footprint(i % 2 ? '#F28C28' : '#1F64C8', i % 2 === 0);
+          document.body.appendChild(p);
+          setTimeout(function () { p.remove(); }, 950);
+        }, i * 90);
+      })(i);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  setTimeout(function () { document.documentElement.classList.remove('arrive'); }, 800);
+
+  // 3) サイト内のページへ移るとき、足あとが画面を横切ってから切り替える
+  if (reduce) return;
+  var transit = null;
+  document.addEventListener('click', function (e) {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target.closest && e.target.closest('a[href]');
+    if (!a || a.target === '_blank' || a.hasAttribute('download')) return;
+    var url = new URL(a.href, location.href);
+    if (url.origin !== location.origin || !/\.html$|\/$/.test(url.pathname)) return;
+    if (url.pathname === location.pathname && url.hash) return; // 同じページ内の移動はそのまま
+    e.preventDefault();
+    transit = document.createElement('div');
+    transit.className = 'transit';
+    transit.setAttribute('aria-hidden', 'true');
+    var row = '<div class="row">';
+    for (var i = 0; i < 6; i++) {
+      row += footprint(i % 2 ? '#F28C28' : '#1F64C8', i % 2 === 0).replace('<svg ', '<svg style="animation-delay:' + (0.15 + i * 0.06) + 's;margin-top:' + (i % 2 ? 16 : 0) + 'px" ');
+    }
+    transit.innerHTML = row + '</div>';
+    document.body.appendChild(transit);
+    requestAnimationFrame(function () { transit.classList.add('is-in'); });
+    try { sessionStorage.setItem('hjTransit', '1'); } catch (err) {}
+    setTimeout(function () { location.href = a.href; }, 650);
+  });
+  // 「戻る」でこのページに帰ってきたとき、幕が残らないようにする
+  window.addEventListener('pageshow', function (e) {
+    if (e.persisted) {
+      if (transit) { transit.remove(); transit = null; }
+      document.documentElement.classList.remove('arrive');
+      try { sessionStorage.removeItem('hjTransit'); } catch (err) {}
+    }
+  });
+});
