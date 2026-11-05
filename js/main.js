@@ -198,4 +198,29 @@ document.addEventListener('DOMContentLoaded', function () {
       setTimeout(function (x) { return function () { x.remove(); }; }(d), 1000);
     }
   });
+
+  // 5) スマホでスクロールしているとき、指の通った跡にキラキラを残す
+  var lastSpark = 0;
+  document.addEventListener('touchmove', function (e) {
+    var now = Date.now();
+    if (now - lastSpark < 45) return; // 出しすぎないように間引く
+    lastSpark = now;
+    var t = e.touches[0];
+    if (!t) return;
+    var kinds = ['star', 'dot', 'star', 'heart'];
+    for (var j = 0; j < 2; j++) {
+      var d = document.createElement('span');
+      d.className = 'burst-dot';
+      var size = rnd(10, 18);
+      d.style.left = (t.clientX + rnd(-14, 14)).toFixed(0) + 'px';
+      d.style.top = (t.clientY + rnd(-14, 14)).toFixed(0) + 'px';
+      d.style.width = d.style.height = size.toFixed(0) + 'px';
+      d.style.setProperty('--bx', rnd(-30, 30).toFixed(0) + 'px');
+      d.style.setProperty('--by', rnd(10, 50).toFixed(0) + 'px');
+      d.style.animation = 'hj-burst ' + rnd(.6, 1).toFixed(2) + 's ease-out forwards';
+      d.innerHTML = shapes[kinds[Math.floor(rnd(0, 4))]].replace(/__C__/g, colors[Math.floor(rnd(0, colors.length))]);
+      document.body.appendChild(d);
+      setTimeout(function (x) { return function () { x.remove(); }; }(d), 1100);
+    }
+  }, { passive: true });
 });
