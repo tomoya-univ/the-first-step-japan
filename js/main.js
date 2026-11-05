@@ -289,7 +289,7 @@ document.addEventListener('DOMContentLoaded', function () {
   btn.type = 'button';
   btn.className = 'to-top';
   btn.setAttribute('aria-label', 'ページの上に戻る');
-  btn.innerHTML = '<svg viewBox="-12 -12 32 24" aria-hidden="true" style="transform:rotate(-90deg)"><g fill="#26252E"><ellipse cx="0" cy="0" rx="11" ry="6.5"/><circle cx="13" cy="-4" r="2.4"/><circle cx="15.5" cy="-.5" r="2.1"/><circle cx="15" cy="3" r="1.8"/><circle cx="12.5" cy="5.8" r="1.5"/></g></svg><span aria-hidden="true">うえへ</span>';
+  btn.innerHTML = '<svg viewBox="-16 -16 32 32" aria-hidden="true"><g fill="#26252E" transform="rotate(-90) translate(-3 0)"><ellipse cx="0" cy="0" rx="11" ry="6.5"/><circle cx="13" cy="-4" r="2.4"/><circle cx="15.5" cy="-.5" r="2.1"/><circle cx="15" cy="3" r="1.8"/><circle cx="12.5" cy="5.8" r="1.5"/></g></svg><span aria-hidden="true">うえへ</span>';
   document.body.appendChild(btn);
   var shown = false;
   function toggleBtn() {
@@ -299,7 +299,7 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('scroll', toggleBtn, { passive: true });
   toggleBtn();
   btn.addEventListener('click', function () {
-    if (reduce) { window.scrollTo(0, 0); return; }
+    if (reduce) { document.documentElement.style.scrollBehavior = 'auto'; window.scrollTo(0, 0); document.documentElement.style.scrollBehavior = ''; return; }
     // ボタンの位置から、足あとがぺたぺた上へ歩いていく
     var r = btn.getBoundingClientRect();
     var x = r.left + r.width / 2 - 13;
@@ -316,8 +316,27 @@ document.addEventListener('DOMContentLoaded', function () {
         }, i * 90);
       })(i);
     }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    smoothToTop();
   });
+  // どのブラウザでも同じように動くよう、少しずつ自分でスクロールさせる
+  function smoothToTop() {
+    var root = document.documentElement;
+    var start = window.pageYOffset || root.scrollTop || document.body.scrollTop || 0;
+    if (start <= 0) return;
+    var prev = root.style.scrollBehavior;
+    root.style.scrollBehavior = 'auto';
+    var dur = Math.min(900, 300 + start / 4), t0 = null;
+    function step(ts) {
+      if (t0 === null) t0 = ts;
+      var k = Math.min(1, (ts - t0) / dur);
+      var ease = 1 - Math.pow(1 - k, 3);
+      var y = Math.round(start * (1 - ease));
+      window.scrollTo(0, y);
+      if (k < 1) requestAnimationFrame(step);
+      else { window.scrollTo(0, 0); root.style.scrollBehavior = prev; }
+    }
+    requestAnimationFrame(step);
+  }
 
   setTimeout(function () { document.documentElement.classList.remove('arrive'); }, 800);
 
@@ -353,4 +372,86 @@ document.addEventListener('DOMContentLoaded', function () {
       try { sessionStorage.removeItem('hjTransit'); } catch (err) {}
     }
   });
+});
+
+// ---------- トップのイラスト・空の色・ロゴの隠し演出 ----------
+document.addEventListener('DOMContentLoaded', function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function rnd(a, b) { return a + Math.random() * (b - a); }
+  var hero = document.querySelector('.hero');
+
+  // 1) 描いた絵が、タブレットからスマホへ飛んでいく
+  var heroImg = document.querySelector('.hero-art img');
+  if (heroImg && !reduce) {
+    var stage = document.createElement('div');
+    stage.className = 'hero-stage';
+    heroImg.parentNode.insertBefore(stage, heroImg);
+    stage.appendChild(heroImg);
+    var pic = document.createElement('div');
+    pic.className = 'fly-pic';
+    pic.setAttribute('aria-hidden', 'true');
+    pic.innerHTML = '<svg viewBox="0 0 64 48"><rect x="1" y="1" width="62" height="46" rx="6" fill="#fff" stroke="#26252E" stroke-width="2"/>' +
+      '<circle cx="16" cy="15" r="6" fill="#FFD54A"/><polygon points="30,24 41,15 52,24" fill="#F28C28"/><rect x="33" y="24" width="16" height="13" fill="#6FA8F5"/>' +
+      '<path d="M2 38 Q 20 33 36 38 T 62 37 V46 H2 Z" fill="#7CC79A"/></svg>';
+    var ping = document.createElement('div');
+    ping.className = 'fly-ping';
+    ping.setAttribute('aria-hidden', 'true');
+    ping.innerHTML = '<svg viewBox="0 0 24 24"><path fill="#F06292" d="M12 21s-8.5-5.3-8.5-11.2A4.8 4.8 0 0 1 12 6.6a4.8 4.8 0 0 1 8.5 3.2C20.5 15.7 12 21 12 21z"/></svg>';
+    stage.appendChild(pic);
+    stage.appendChild(ping);
+  }
+
+  // 2) 時間帯で、トップの空の色を変える（朝 5〜10時・昼 10〜16時・夕方 16〜19時・夜 19〜5時）
+  //    ※ 確認用に URL の末尾へ ?sky=night などを付けると、その時間帯で表示できる
+  if (hero) {
+    var hr = new Date().getHours();
+    var sky = hr >= 5 && hr < 10 ? 'morning' : hr < 16 && hr >= 10 ? 'day' : hr >= 16 && hr < 19 ? 'evening' : 'night';
+    var q = /[?&]sky=(morning|day|evening|night)/.exec(location.search);
+    if (q) sky = q[1];
+    document.documentElement.classList.add('sky-' + sky);
+    if (sky === 'night') {
+      var layer = document.createElement('div');
+      layer.className = 'deco-layer';
+      layer.setAttribute('aria-hidden', 'true');
+      for (var i = 0; i < 26; i++) {
+        var st = document.createElement('span');
+        st.className = 'sky-star';
+        st.style.cssText = 'left:' + rnd(1, 99).toFixed(1) + '%;top:' + rnd(2, 95).toFixed(1) + '%;--t:' + rnd(1.4, 3.2).toFixed(1) + 's;--dl:-' + rnd(0, 3).toFixed(1) + 's';
+        layer.appendChild(st);
+      }
+      layer.insertAdjacentHTML('beforeend', '<svg class="sky-moon" viewBox="0 0 24 24"><path fill="#FFE9A0" d="M15.5 2.5A9.5 9.5 0 1 0 21.5 17 8 8 0 0 1 15.5 2.5z"/></svg>');
+      hero.insertBefore(layer, hero.firstChild);
+    }
+  }
+
+  // 3) トップページでロゴを5回続けて押すと、紙吹雪が舞う
+  var logo = document.querySelector('.site-header .logo');
+  var onTop = /\/(index\.html)?$/.test(location.pathname);
+  if (logo && onTop) {
+    var taps = 0, timer = null;
+    logo.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      taps++;
+      clearTimeout(timer);
+      timer = setTimeout(function () { taps = 0; }, 1500);
+      if (taps < 5) return;
+      taps = 0;
+      if (reduce) return;
+      var colors = ['#FFD54A', '#1F64C8', '#F28C28', '#2C7A4B', '#F06292', '#7CB5FF'];
+      for (var i = 0; i < 140; i++) {
+        var c = document.createElement('span');
+        c.className = 'confetti';
+        c.style.left = rnd(0, 100).toFixed(1) + 'vw';
+        c.style.background = colors[i % colors.length];
+        if (i % 3 === 0) c.style.borderRadius = '50%';
+        c.style.setProperty('--x', rnd(-120, 120).toFixed(0) + 'px');
+        c.style.setProperty('--r', rnd(360, 1080).toFixed(0) + 'deg');
+        c.style.setProperty('--t', rnd(2.2, 3.8).toFixed(2) + 's');
+        c.style.setProperty('--dl', rnd(0, .8).toFixed(2) + 's');
+        document.body.appendChild(c);
+        setTimeout(function (x) { return function () { x.remove(); }; }(c), 4800);
+      }
+    }, true);
+  }
 });

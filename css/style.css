@@ -332,11 +332,14 @@ html.show-loader.loader-done .loader { opacity: 0; visibility: hidden; }
   html.js .reveal.is-visible .step-num, html.js .reveal.is-visible .num { animation: hj-pop .5s cubic-bezier(.3,1.6,.5,1) forwards; animation-delay: calc(var(--d, 0s) + .25s); }
 
   /* 見出しの下に、クレヨンで線を引くような下線 */
-  .h2::after { content: ""; display: block; width: 64px; height: 6px; margin-top: 12px; border-radius: 999px; background: var(--yellow); transform-origin: left; }
-  .center .h2::after { margin-left: auto; margin-right: auto; transform-origin: center; }
+  .h2::after {
+    content: ""; display: block; width: 120px; height: 14px; margin-top: 10px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 14'%3E%3Cpath d='M3 9 C 14 3, 24 3, 34 8 S 54 12, 64 7 S 84 2, 95 7 S 110 11, 117 5' fill='none' stroke='%23FFD54A' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M8 10 C 18 6, 26 6, 34 9 S 52 12, 62 8' fill='none' stroke='%23FFC21A' stroke-width='1.6' stroke-linecap='round' opacity='.7'/%3E%3C/svg%3E") no-repeat left center / 100% 100%;
+  }
+  .center .h2::after { margin-left: auto; margin-right: auto; }
   .cta-band .h2::after, .policy .h2::after { display: none; }
-  html.js .reveal .h2::after, html.js .h2.reveal::after { transform: scaleX(0); transition: transform .8s cubic-bezier(.2,.8,.2,1) .35s; }
-  html.js .reveal.is-visible .h2::after, html.js .h2.reveal.is-visible::after { transform: scaleX(1); }
+  html.js .reveal .h2::after, html.js .h2.reveal::after { clip-path: inset(0 100% 0 0); transition: clip-path .9s cubic-bezier(.4,0,.2,1) .35s; }
+  html.js .reveal.is-visible .h2::after, html.js .h2.reveal.is-visible::after { clip-path: inset(0 0 0 0); }
 
   /* --- トップの登場（ロード画面が消えてから始まる） --- */
   .hero-text > * { animation: hj-rise .8s cubic-bezier(.2,.8,.2,1) both; }
@@ -347,7 +350,7 @@ html.show-loader.loader-done .loader { opacity: 0; visibility: hidden; }
   .hero-text > :nth-child(5) { animation-delay: .45s; }
   .hero-text > :nth-child(6) { animation-delay: .55s; }
   .hero-art { animation: hj-rise 1s cubic-bezier(.2,.8,.2,1) .3s both; }
-  .hero-art img { animation: hj-float 6s ease-in-out 1.3s infinite; }
+  .hero-art img:only-child, .hero-stage { animation: hj-float 6s ease-in-out 1.3s infinite; }
   .page-hero .container > * { animation: hj-rise .7s cubic-bezier(.2,.8,.2,1) both; }
   .page-hero .container > :nth-child(2) { animation-delay: .1s; }
   .page-hero .container > :nth-child(3) { animation-delay: .2s; }
@@ -488,7 +491,8 @@ html.show-loader .loader { animation: hj-loader-out .6s ease 5s forwards; }
 
 /* 足あとの「上に戻る」ボタン */
 .to-top {
-  position: fixed; right: 16px; bottom: 16px; z-index: 950;
+  position: fixed; right: 16px; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); z-index: 950;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
   width: 56px; height: 56px; border-radius: 50%; border: 3px solid var(--ink);
   background: var(--yellow); color: var(--ink); cursor: pointer;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0;
@@ -538,3 +542,62 @@ html.show-loader .loader { animation: hj-loader-out .6s ease 5s forwards; }
 @keyframes hj-print-up { 0% { opacity: 0; transform: scale(.5) rotate(-90deg); } 20%, 70% { opacity: 1; transform: rotate(-90deg); } 100% { opacity: 0; transform: rotate(-90deg); } }
 @keyframes hj-wipe-in { from { transform: translateX(-100%); } to { transform: none; } }
 @keyframes hj-wipe-out { from { transform: none; } to { transform: translateX(100%); } }
+
+/* =========================================================
+   トップのイラスト・波の境目・空の色・ロゴの隠し演出
+   ========================================================= */
+/* 描いた絵が、タブレットからスマホへ飛んでいく */
+.hero-stage { position: relative; }
+.hero-stage img { display: block; }
+.fly-pic { position: absolute; left: 34.6%; top: 46%; width: 15%; transform: translate(-50%, -50%) scale(0); pointer-events: none; }
+.fly-pic svg { display: block; width: 100%; height: auto; filter: drop-shadow(0 4px 6px rgba(38,37,46,.25)); }
+.fly-ping { position: absolute; left: 86%; top: 52%; width: 7%; transform: translate(-50%, -50%) scale(0); pointer-events: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .fly-pic { animation: hj-fly 5s cubic-bezier(.45,0,.4,1) 2.2s infinite; }
+  .fly-ping { animation: hj-ping 5s ease-out 2.2s infinite; }
+}
+@keyframes hj-fly {
+  0%   { left: 34.6%; top: 46%; transform: translate(-50%, -50%) scale(0) rotate(0); opacity: 1; }
+  10%  { left: 34.6%; top: 46%; transform: translate(-50%, -50%) scale(1.15) rotate(-4deg); }
+  16%  { left: 36%; top: 44%; transform: translate(-50%, -50%) scale(1) rotate(-6deg); }
+  38%  { left: 66%; top: 18%; transform: translate(-50%, -50%) scale(.8) rotate(8deg); }
+  56%  { left: 86%; top: 58%; transform: translate(-50%, -50%) scale(.5) rotate(0); opacity: 1; }
+  62%  { left: 86%; top: 60%; transform: translate(-50%, -50%) scale(.3); opacity: 0; }
+  100% { left: 86%; top: 60%; transform: translate(-50%, -50%) scale(0); opacity: 0; }
+}
+@keyframes hj-ping {
+  0%, 56% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  60% { transform: translate(-50%, -110%) scale(1.3); opacity: 1; }
+  74% { transform: translate(-50%, -190%) scale(1); opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* セクションの境目を、波の形に（上のセクションに少し食い込ませる） */
+.section--white, .section--yellow, .section--blue, .site-footer { position: relative; }
+.section--white::before, .section--yellow::before, .section--blue::before, .site-footer::before {
+  content: ""; position: absolute; left: 0; right: 0; top: -21px; height: 22px; pointer-events: none;
+  background: inherit;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 22' preserveAspectRatio='none'%3E%3Cpath d='M0 22 V12 C 20 2, 40 2, 60 11 S 100 21, 120 11 S 150 3, 160 9 V22 Z'/%3E%3C/svg%3E") repeat-x left bottom / 160px 22px;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 22' preserveAspectRatio='none'%3E%3Cpath d='M0 22 V12 C 20 2, 40 2, 60 11 S 100 21, 120 11 S 150 3, 160 9 V22 Z'/%3E%3C/svg%3E") repeat-x left bottom / 160px 22px;
+}
+
+/* 時間帯で、トップの空の色が変わる（朝・昼・夕方・夜） */
+html.sky-morning .hero { background: linear-gradient(180deg, #D9ECFF 0%, #EEF6FF 45%, var(--ground) 100%); }
+html.sky-evening .hero { background: linear-gradient(180deg, #FFD3A8 0%, #FFE6CC 45%, #FFF6EC 100%); }
+html.sky-night .hero { background: linear-gradient(180deg, #16213E 0%, #24345F 60%, #34477A 100%); color: #fff; }
+html.sky-night .hero h1, html.sky-night .hero .catch { color: #fff; }
+html.sky-night .hero .sub-title, html.sky-night .hero .desc { color: #D6DCF0; }
+html.sky-night .hero h1 .ch.dot { color: var(--yellow); }
+html.sky-night .hero h1 .ch.dot-b { color: #FFB066; }
+html.sky-night .hero::before, html.sky-night .hero::after { opacity: .12; }
+html.sky-night .hero .btn-outline { border-color: #fff; }
+.sky-star { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #FFF6C8; box-shadow: 0 0 6px 2px rgba(255,246,200,.6); pointer-events: none; }
+.sky-moon { position: absolute; right: 6%; top: 10%; width: 56px; height: 56px; pointer-events: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .sky-star { animation: hj-twinkle var(--t, 2.4s) ease-in-out var(--dl, 0s) infinite alternate; }
+}
+@keyframes hj-twinkle { from { opacity: .2; transform: scale(.6); } to { opacity: 1; transform: scale(1.2); } }
+
+/* ロゴを5回押すと、紙吹雪 */
+.confetti { position: fixed; top: -20px; z-index: 1100; width: 10px; height: 14px; pointer-events: none; border-radius: 2px; animation: hj-confetti var(--t, 3s) cubic-bezier(.25,.6,.4,1) var(--dl, 0s) forwards; }
+@keyframes hj-confetti { 0% { transform: translate(0, 0) rotate(0); opacity: 1; } 85% { opacity: 1; } 100% { transform: translate(var(--x, 0), 110vh) rotate(var(--r, 720deg)); opacity: 0; } }
