@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-u1pemRi7bukH7LDHj62LVT7TIqaooTLaWsP0xaVE1/0='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self' https://tomoya-univ.github.io; form-action 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-u1pemRi7bukH7LDHj62LVT7TIqaooTLaWsP0xaVE1/0='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self' https://tomoya-univ.github.io; form-action 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>こどもの みんなへ｜はじめのいっぽ</title>
 <meta name="description" content="おえかきひろばの あそびかたと ３つの やくそくを しょうかいするよ。">
@@ -18,12 +18,32 @@
 <link rel="icon" href="images/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 <meta name="theme-color" content="#FFD54A">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap">
+<link rel="preload" href="fonts/zen-maru-gothic-400-a.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/zen-maru-gothic-900-a.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/fonts.css">
 <script>document.documentElement.classList.add("js");try{if(!sessionStorage.getItem("hjLoaded")){document.documentElement.classList.add("show-loader")}}catch(e){}</script>
 <link rel="stylesheet" href="css/style.css">
 <script src="js/main.js" defer></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+  {
+   "@type": "ListItem",
+   "position": 1,
+   "name": "トップ",
+   "item": "https://tomoya-univ.github.io/the-first-step-japan/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 2,
+   "name": "こどもの みんなへ",
+   "item": "https://tomoya-univ.github.io/the-first-step-japan/kids.html"
+  }
+ ]
+}
+</script>
 </head>
 <body class="kids-page">
 <div class="loader" aria-hidden="true">

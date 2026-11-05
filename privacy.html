@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-u1pemRi7bukH7LDHj62LVT7TIqaooTLaWsP0xaVE1/0='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self' https://tomoya-univ.github.io; form-action 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-u1pemRi7bukH7LDHj62LVT7TIqaooTLaWsP0xaVE1/0='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self' https://tomoya-univ.github.io; form-action 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>プライバシーポリシー｜はじめのいっぽ</title>
 <meta name="description" content="はじめのいっぽにおける個人情報の取り扱いについて。">
@@ -18,12 +18,32 @@
 <link rel="icon" href="images/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 <meta name="theme-color" content="#FFD54A">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap">
+<link rel="preload" href="fonts/zen-maru-gothic-400-a.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/zen-maru-gothic-900-a.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/fonts.css">
 <script>document.documentElement.classList.add("js");try{if(!sessionStorage.getItem("hjLoaded")){document.documentElement.classList.add("show-loader")}}catch(e){}</script>
 <link rel="stylesheet" href="css/style.css">
 <script src="js/main.js" defer></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+  {
+   "@type": "ListItem",
+   "position": 1,
+   "name": "トップ",
+   "item": "https://tomoya-univ.github.io/the-first-step-japan/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 2,
+   "name": "プライバシーポリシー",
+   "item": "https://tomoya-univ.github.io/the-first-step-japan/privacy.html"
+  }
+ ]
+}
+</script>
 </head>
 <body>
 <div class="loader" aria-hidden="true">
@@ -90,7 +110,6 @@
       <ul>
         <li>お問い合わせ・アンケートには Google フォーム（Google LLC）を利用しています。ご入力内容は Google のサーバーに保存されます。詳しくは <a href="https://policies.google.com/privacy?hl=ja" target="_blank" rel="noopener">Google のプライバシーポリシー</a>をご覧ください。</li>
         <li>本サイトは GitHub Pages（GitHub, Inc.）で公開しており、アクセスの記録（IPアドレス等）が GitHub により収集される場合があります。</li>
-        <li>本サイトは文字の表示に Google Fonts を利用しているため、閲覧時に Google のサーバーと通信します。</li>
         <li>本サイトでは、アクセス解析ツールや広告用の Cookie は使用していません。ロード画面の表示制御のためにブラウザの一時的な保存領域（セッションストレージ）を利用しますが、個人を特定する情報は保存しません。</li>
       </ul>
 
@@ -106,7 +125,7 @@
       <h2 class="h3">8. お問い合わせ窓口</h2>
       <p>運営：はじめのいっぽ<br>お問い合わせ：<a href="https://docs.google.com/forms/d/e/1FAIpQLSeSsKOuJhGD9UGZ8E6jemL_Nk5T4xK1qRYUpNFR01FmteaucQ/viewform" target="_blank" rel="noopener">お問い合わせフォーム</a></p>
 
-      <p class="note">制定日：2026年11月4日</p>
+      <p class="note">制定日：2026年11月4日<br>改定日：2026年11月5日</p>
     </div>
   </section>
 

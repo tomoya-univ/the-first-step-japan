@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-u1pemRi7bukH7LDHj62LVT7TIqaooTLaWsP0xaVE1/0='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self' https://tomoya-univ.github.io; form-action 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-u1pemRi7bukH7LDHj62LVT7TIqaooTLaWsP0xaVE1/0='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self' https://tomoya-univ.github.io; form-action 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>はじめのいっぽ｜かいて・みせて・はなそう</title>
 <meta name="description" content="タブレットで描いた絵が、おうちの人のスマートフォンに届く。お絵かき体験を通して、親子でインターネットとの付き合い方を話し合うきっかけをつくる活動です。">
@@ -20,12 +20,22 @@
 <link rel="icon" href="images/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 <meta name="theme-color" content="#FFD54A">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap">
+<link rel="preload" href="fonts/zen-maru-gothic-400-a.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/zen-maru-gothic-900-a.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/fonts.css">
 <script>document.documentElement.classList.add("js");try{if(!sessionStorage.getItem("hjLoaded")){document.documentElement.classList.add("show-loader")}}catch(e){}</script>
 <link rel="stylesheet" href="css/style.css">
 <script src="js/main.js" defer></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "WebSite",
+ "name": "はじめのいっぽ",
+ "alternateName": "おえかきひろば",
+ "url": "https://tomoya-univ.github.io/the-first-step-japan/",
+ "inLanguage": "ja"
+}
+</script>
 </head>
 <body>
 <div class="loader" aria-hidden="true">

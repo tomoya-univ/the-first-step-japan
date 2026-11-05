@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-u1pemRi7bukH7LDHj62LVT7TIqaooTLaWsP0xaVE1/0='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self' https://tomoya-univ.github.io; form-action 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-u1pemRi7bukH7LDHj62LVT7TIqaooTLaWsP0xaVE1/0='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self' https://tomoya-univ.github.io; form-action 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>園・施設の皆様へ｜はじめのいっぽ</title>
 <meta name="description" content="幼稚園・保育園・施設向けに、おえかきひろば体験会（試験運用）の内容とご相談の流れをご案内します。">
@@ -18,12 +18,104 @@
 <link rel="icon" href="images/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 <meta name="theme-color" content="#FFD54A">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap">
+<link rel="preload" href="fonts/zen-maru-gothic-400-a.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/zen-maru-gothic-900-a.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/fonts.css">
 <script>document.documentElement.classList.add("js");try{if(!sessionStorage.getItem("hjLoaded")){document.documentElement.classList.add("show-loader")}}catch(e){}</script>
 <link rel="stylesheet" href="css/style.css">
 <script src="js/main.js" defer></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+  {
+   "@type": "ListItem",
+   "position": 1,
+   "name": "トップ",
+   "item": "https://tomoya-univ.github.io/the-first-step-japan/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 2,
+   "name": "園・施設の皆様へ",
+   "item": "https://tomoya-univ.github.io/the-first-step-japan/kindergarten.html"
+  }
+ ]
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "費用はかかりますか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "費用は無料です。参加費だけでなく、機材や通信環境の準備も含めて、園・施設の皆様に費用をご負担いただくことはありません。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "先生方に準備や進行をお願いすることはありますか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "ありません。タブレットの準備から当日の進行・片付けまで、運営スタッフがすべて行います。園の皆様には、実施場所とお時間の調整のみお願いしています。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "タブレットなどの機材は園で用意する必要がありますか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "必要ありません。体験に使うタブレットは運営スタッフが用意します。保護者の方には、絵を受け取るためのスマートフォンをご用意いただきます。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "1回に何人まで参加できますか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "1回あたり4〜5名程度を目安としています。人数が多い場合は、回を分けるなどの方法をご相談ください。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "どのくらいの時間がかかりますか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "30分〜1時間程度です。降園のタイミングなど、ご都合のよい時間帯に合わせてご相談ください。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "年長以外の園児も参加できますか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "主な対象は年長の園児とその保護者ですが、アプリは3歳〜8歳程度のお子さまを想定しています。ほかの学年での実施もご相談ください。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "インターネット環境（Wi-Fi）は園で用意する必要がありますか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "インターネット環境（Wi-Fi）は運営スタッフが用意します。園・施設のWi-Fiをお借りする必要はありません。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "保護者の方への案内はどうすればよいですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "園児・保護者向けの案内資料は運営スタッフが用意します。配布のご協力をお願いする場合があります。"
+   }
+  }
+ ]
+}
+</script>
 </head>
 <body>
 <div class="loader" aria-hidden="true">
