@@ -467,3 +467,7 @@ html.show-loader.loader-done .loader { opacity: 0; visibility: hidden; }
 @keyframes hj-burst { from { transform: translate(0, 0) scale(1) rotate(0); opacity: 1; } to { transform: translate(var(--bx), var(--by)) scale(.3) rotate(240deg); opacity: 0; } }
 .burst-dot svg, .deco svg { width: 100%; height: auto; display: block; }
 .note a, .policy a { overflow-wrap: anywhere; }
+
+/* 万一プログラム（main.js）が読み込めなくても、ロード画面は5秒で自動的に消える */
+html.show-loader .loader { animation: hj-loader-out .6s ease 5s forwards; }
+@keyframes hj-loader-out { to { opacity: 0; visibility: hidden; } }

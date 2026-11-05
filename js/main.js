@@ -8,6 +8,16 @@ document.addEventListener('DOMContentLoaded', function () {
     toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
     toggle.textContent = open ? 'とじる' : 'メニュー';
   });
+  // Esc キーやメニュー内のリンクで、メニューを閉じる
+  function close(focusBack) {
+    if (!nav.classList.contains('is-open')) return;
+    nav.classList.remove('is-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.textContent = 'メニュー';
+    if (focusBack) toggle.focus();
+  }
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(true); });
+  nav.addEventListener('click', function (e) { if (e.target.closest('a')) close(false); });
 });
 
 // ロード画面：ページの読み込み完了後（最短1.8秒・最長3.5秒）にフェードアウト
@@ -92,12 +102,12 @@ document.addEventListener('DOMContentLoaded', function () {
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var colors = ['#FFD54A', '#1F64C8', '#F28C28', '#2C7A4B', '#F06292', '#7CB5FF'];
   var shapes = {
-    star: '<svg viewBox="0 0 24 24"><path fill="C" d="M12 1.5l3 7 7.5.6-5.7 5 1.8 7.4L12 17.6 5.4 21.5l1.8-7.4L1.5 9.1 9 8.5z"/></svg>',
-    heart: '<svg viewBox="0 0 24 24"><path fill="C" d="M12 21s-8.5-5.3-8.5-11.2A4.8 4.8 0 0 1 12 6.6a4.8 4.8 0 0 1 8.5 3.2C20.5 15.7 12 21 12 21z"/></svg>',
-    circle: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="C" stroke-width="3.5"/></svg>',
-    squiggle: '<svg viewBox="0 0 48 16"><path d="M2 8c5-8 9 8 14 0s9 8 14 0 9 8 14 0" fill="none" stroke="C" stroke-width="3.5" stroke-linecap="round"/></svg>',
-    tri: '<svg viewBox="0 0 24 24"><path d="M12 3l9 16H3z" fill="none" stroke="C" stroke-width="3" stroke-linejoin="round"/></svg>',
-    dot: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="C"/></svg>'
+    star: '<svg viewBox="0 0 24 24"><path fill="__C__" d="M12 1.5l3 7 7.5.6-5.7 5 1.8 7.4L12 17.6 5.4 21.5l1.8-7.4L1.5 9.1 9 8.5z"/></svg>',
+    heart: '<svg viewBox="0 0 24 24"><path fill="__C__" d="M12 21s-8.5-5.3-8.5-11.2A4.8 4.8 0 0 1 12 6.6a4.8 4.8 0 0 1 8.5 3.2C20.5 15.7 12 21 12 21z"/></svg>',
+    circle: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="__C__" stroke-width="3.5"/></svg>',
+    squiggle: '<svg viewBox="0 0 48 16"><path d="M2 8c5-8 9 8 14 0s9 8 14 0 9 8 14 0" fill="none" stroke="__C__" stroke-width="3.5" stroke-linecap="round"/></svg>',
+    tri: '<svg viewBox="0 0 24 24"><path d="M12 3l9 16H3z" fill="none" stroke="__C__" stroke-width="3" stroke-linejoin="round"/></svg>',
+    dot: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="__C__"/></svg>'
   };
   function rnd(a, b) { return a + Math.random() * (b - a); }
 
@@ -118,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
       el.style.cssText = 'left:' + s[0] + '%;top:' + s[1] + '%;width:' + size + 'px;opacity:' + rnd(.55, .9).toFixed(2) +
         ';--t:' + rnd(4, 8).toFixed(1) + 's;--dl:-' + rnd(0, 4).toFixed(1) + 's;--x:' + rnd(-20, 20).toFixed(0) + 'px;--y:' + rnd(-28, 28).toFixed(0) +
         'px;--rt:' + rnd(12, 30).toFixed(0) + 's';
-      el.innerHTML = shapes[name].replace(/C/g, colors[i % colors.length]);
+      el.innerHTML = shapes[name].replace(/__C__/g, colors[i % colors.length]);
       layer.appendChild(el);
     }
     area.insertBefore(layer, area.firstChild);
@@ -182,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function () {
       d.style.setProperty('--bx', (Math.cos(ang) * dist).toFixed(0) + 'px');
       d.style.setProperty('--by', (Math.sin(ang) * dist).toFixed(0) + 'px');
       d.style.animation = 'hj-burst ' + rnd(.6, .9).toFixed(2) + 's cubic-bezier(.2,.8,.3,1) forwards';
-      d.innerHTML = shapes[kinds[j % 3]].replace(/C/g, colors[j % colors.length]);
+      d.innerHTML = shapes[kinds[j % 3]].replace(/__C__/g, colors[j % colors.length]);
       document.body.appendChild(d);
       setTimeout(function (x) { return function () { x.remove(); }; }(d), 1000);
     }
