@@ -21,3 +21,6 @@
   1. `pip install fonttools brotli`
   2. https://github.com/google/fonts の `ofl/zenmarugothic` から ttf を入手
   3. `python3 tools/build_fonts.py . <ttfのフォルダ>`
+
+## 更新したときは
+CSS・JS を書き換えたら `python3 tools/bump_version.py .` を実行してください。読み込みに版番号が付き、閲覧者のブラウザに古いファイルが残らなくなります。

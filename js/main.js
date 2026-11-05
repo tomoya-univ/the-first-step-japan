@@ -351,6 +351,9 @@ document.addEventListener('DOMContentLoaded', function () {
     if (url.origin !== location.origin || !/\.html$|\/$/.test(url.pathname)) return;
     if (url.pathname === location.pathname && url.hash) return; // 同じページ内の移動はそのまま
     e.preventDefault();
+    go(a.href);
+  });
+  function go(href) {
     transit = document.createElement('div');
     transit.className = 'transit';
     transit.setAttribute('aria-hidden', 'true');
@@ -362,8 +365,9 @@ document.addEventListener('DOMContentLoaded', function () {
     document.body.appendChild(transit);
     requestAnimationFrame(function () { transit.classList.add('is-in'); });
     try { sessionStorage.setItem('hjTransit', '1'); } catch (err) {}
-    setTimeout(function () { location.href = a.href; }, 650);
-  });
+    setTimeout(function () { location.href = href; }, 650);
+  }
+  window.hjGo = go;
   // 「戻る」でこのページに帰ってきたとき、幕が残らないようにする
   window.addEventListener('pageshow', function (e) {
     if (e.persisted) {
@@ -424,34 +428,46 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // 3) トップページでロゴを5回続けて押すと、紙吹雪が舞う
+  // 3) ロゴを素早く5回続けて押すと、紙吹雪が舞う（どのページでも）
+  //    1回だけ押したときは、少し待ってからトップへ移動（トップにいるときは一番上へ戻る）
   var logo = document.querySelector('.site-header .logo');
-  var onTop = /\/(index\.html)?$/.test(location.pathname);
-  if (logo && onTop) {
-    var taps = 0, timer = null;
+  if (logo) {
+    var onTop = /\/(index\.html)?$/.test(location.pathname);
+    var taps = 0, resetTimer = null, navTimer = null;
     logo.addEventListener('click', function (e) {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return; // 新しいタブで開く操作はそのまま
       e.preventDefault();
       e.stopPropagation();
       taps++;
-      clearTimeout(timer);
-      timer = setTimeout(function () { taps = 0; }, 1500);
-      if (taps < 5) return;
-      taps = 0;
-      if (reduce) return;
-      var colors = ['#FFD54A', '#1F64C8', '#F28C28', '#2C7A4B', '#F06292', '#7CB5FF'];
-      for (var i = 0; i < 140; i++) {
-        var c = document.createElement('span');
-        c.className = 'confetti';
-        c.style.left = rnd(0, 100).toFixed(1) + 'vw';
-        c.style.background = colors[i % colors.length];
-        if (i % 3 === 0) c.style.borderRadius = '50%';
-        c.style.setProperty('--x', rnd(-120, 120).toFixed(0) + 'px');
-        c.style.setProperty('--r', rnd(360, 1080).toFixed(0) + 'deg');
-        c.style.setProperty('--t', rnd(2.2, 3.8).toFixed(2) + 's');
-        c.style.setProperty('--dl', rnd(0, .8).toFixed(2) + 's');
-        document.body.appendChild(c);
-        setTimeout(function (x) { return function () { x.remove(); }; }(c), 4800);
+      clearTimeout(resetTimer);
+      clearTimeout(navTimer);
+      resetTimer = setTimeout(function () { taps = 0; }, 1200);
+      if (taps >= 5) { taps = 0; confetti(); return; }
+      if (taps === 1) {
+        navTimer = setTimeout(function () {
+          if (taps > 1) return; // 連打中は移動しない
+          if (onTop) window.scrollTo({ top: 0, behavior: 'smooth' });
+          else if (window.hjGo) window.hjGo(logo.href);
+          else location.href = logo.href;
+        }, 350);
       }
     }, true);
+  }
+  function confetti() {
+    if (reduce) return;
+    var colors = ['#FFD54A', '#1F64C8', '#F28C28', '#2C7A4B', '#F06292', '#7CB5FF'];
+    for (var i = 0; i < 140; i++) {
+      var c = document.createElement('span');
+      c.className = 'confetti';
+      c.style.left = rnd(0, 100).toFixed(1) + 'vw';
+      c.style.background = colors[i % colors.length];
+      if (i % 3 === 0) c.style.borderRadius = '50%';
+      c.style.setProperty('--x', rnd(-120, 120).toFixed(0) + 'px');
+      c.style.setProperty('--r', rnd(360, 1080).toFixed(0) + 'deg');
+      c.style.setProperty('--t', rnd(2.2, 3.8).toFixed(2) + 's');
+      c.style.setProperty('--dl', rnd(0, .8).toFixed(2) + 's');
+      document.body.appendChild(c);
+      setTimeout(function (x) { return function () { x.remove(); }; }(c), 4800);
+    }
   }
 });
