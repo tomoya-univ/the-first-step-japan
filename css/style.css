@@ -471,3 +471,10 @@ html.show-loader.loader-done .loader { opacity: 0; visibility: hidden; }
 /* 万一プログラム（main.js）が読み込めなくても、ロード画面は5秒で自動的に消える */
 html.show-loader .loader { animation: hj-loader-out .6s ease 5s forwards; }
 @keyframes hj-loader-out { to { opacity: 0; visibility: hidden; } }
+
+/* スマホなど「マウスを乗せる」操作がない端末では、タップ後に浮いたままにならないようホバー演出を止める */
+@media (hover: none) {
+  .btn:hover, .card-link:hover, .step:hover, .flow li:hover, .promise:hover, .system .node:hover { transform: none; box-shadow: none; }
+  .card:hover > img, .system .node:hover img, .logo:hover img { transform: none; }
+  .big-step:hover img, .hero h1:hover .ch, .step:hover .step-num, .flow li:hover .step-num { animation-name: none; }
+}

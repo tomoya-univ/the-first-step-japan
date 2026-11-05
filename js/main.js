@@ -178,8 +178,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // 4) 画面をタップ・クリックすると、星や丸がはじける
   if (reduce) return;
-  document.addEventListener('pointerdown', function (e) {
-    if (e.pointerType === 'mouse' && e.button !== 0) return;
+  // スクロール中の指の動きでは出さず、タップ・クリックしたときだけ出す
+  document.addEventListener('click', function (e) {
+    if (e.clientX === 0 && e.clientY === 0) return; // キーボード操作によるクリックは除く
     var kinds = ['star', 'dot', 'heart'];
     for (var j = 0; j < 10; j++) {
       var d = document.createElement('span');
@@ -196,5 +197,5 @@ document.addEventListener('DOMContentLoaded', function () {
       document.body.appendChild(d);
       setTimeout(function (x) { return function () { x.remove(); }; }(d), 1000);
     }
-  }, { passive: true });
+  });
 });
